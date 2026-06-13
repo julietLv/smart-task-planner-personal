@@ -1,0 +1,66 @@
+# 评分维度配置
+dimensions:
+  habit_match:
+    name: "用户习惯匹配度"
+    weight: 0.27          # 权重从 30% 降低到 27%
+    min_score: 0          # 原始最小分
+    max_score: 65         # 原始最大分
+    enabled: true
+
+  date_freshness:
+    name: "日期新鲜度"
+    weight: 0.20
+    min_score: 3
+    max_score: 35
+    enabled: true
+
+  urgency:
+    name: "任务紧急度"
+    weight: 0.15
+    min_score: 0
+    max_score: 50
+    enabled: true
+
+  time_quality:
+    name: "时间段质量"
+    weight: 0.15
+    min_score: 0
+    max_score: 55
+    enabled: true
+
+  load_balance:
+    name: "任务密度平衡"
+    weight: 0.05
+    min_score: -50
+    max_score: 15
+    enabled: true
+
+  priority:
+    name: "优先级权重"
+    weight: 0.08
+    min_score: 20
+    max_score: 70
+    enabled: true
+
+  holiday:
+    name: "节假日效应"
+    weight: 0.05
+    min_score: -40
+    max_score: 0
+    enabled: true
+
+  weather:
+    name: "天气因素"
+    weight: 0.05          # 权重从 2% 提升到 5%
+    min_score: -30
+    max_score: 20
+    enabled: true
+
+# 总权重必须 = 1.0
+total_weight_check: 1.0
+
+# 全局设置
+global:
+  score_display_range: [0, 100]  # 展示分数范围
+  min_difference_threshold: 15   # 最小差异阈值（低于此值认为无明显差异）
+  cold_start_confidence: 0.3     # 冷启动置信度

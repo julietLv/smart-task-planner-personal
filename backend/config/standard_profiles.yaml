@@ -1,0 +1,207 @@
+# 人群标准作息模板配置
+# 用于智能排程的 Layer 2: 人群标准约束
+
+standard_profiles:
+  # ==================== 学生模板 ====================
+  student:
+    name: "学生"
+    description: "适用于在校学生，注重学习效率和课程安排"
+    
+    typical_schedule:
+      wake_up: "07:00"           # 起床时间
+      sleep: "23:00"             # 睡觉时间
+      productive_hours:          # 高效时段
+        - "09:00-11:30"          # 上午学习高峰
+        - "14:00-17:00"          # 下午学习时段
+        - "19:00-21:00"          # 晚间复习时段
+      meal_times:                # 用餐时间
+        - "07:30"                # 早餐
+        - "12:00"                # 午餐
+        - "18:00"                # 晚餐
+      class_blocks:              # 典型上课时段
+        - "08:00-12:00"
+        - "14:00-17:00"
+    
+    capacity:
+      workday_study_hours: 8     # 工作日学习时长（小时）
+      weekend_study_hours: 4     # 周末学习时长（小时）
+      max_continuous_study: 2    # 最多连续学习时长（小时）
+      min_break_between_tasks: 0.25  # 任务间最小休息（15分钟）
+    
+    preferences:
+      preferred_time_slot: "morning"  # 偏好时段：早晨效率高
+      task_distribution: "balanced"   # 任务分布：均匀分布
+      priority_focus: "deadline"      # 优先关注：截止日期
+    
+    energy_cost_coefficients:    # 任务类型能耗系数
+      study: 1.2                 # 深度学习较耗神
+      meeting: 0.6               # 会议相对轻松
+      exercise: 0.7              # 运动是调节
+      creative: 1.0              # 创作中等强度
+      social: 0.5                # 社交轻松
+  
+  # ==================== 工作者模板 ====================
+  worker:
+    name: "工作者"
+    description: "适用于职场人士，注重工作效率和会议安排"
+    
+    typical_schedule:
+      wake_up: "07:30"
+      sleep: "23:30"
+      productive_hours:
+        - "09:00-11:30"          # 上午工作高峰
+        - "14:30-17:30"          # 下午工作时段
+      meal_times:
+        - "08:00"
+        - "12:30"
+        - "19:00"
+      work_blocks:               # 典型工作时段
+        - "09:00-12:00"
+        - "14:00-18:00"
+    
+    capacity:
+      workday_work_hours: 8      # 工作日工作时长
+      weekend_personal_hours: 4  # 周末个人事务时长
+      max_continuous_work: 3     # 最多连续工作时长
+      min_break_between_tasks: 0.25
+    
+    preferences:
+      preferred_time_slot: "morning"  # 偏好时段：上午处理重要工作
+      task_distribution: "front_loaded"  # 重要任务放上午
+      priority_focus: "urgency"       # 优先关注：紧急度
+    
+    energy_cost_coefficients:
+      meeting: 0.7               # 会议中等强度
+      deep_work: 1.3             # 深度工作很耗神
+      exercise: 0.8              # 运动调节
+      creative: 1.1              # 创作较累
+      social: 0.6                # 社交轻松
+  
+  # ==================== 老年人模板 ====================
+  elderly:
+    name: "老年人"
+    description: "适用于退休人士，注重健康和生活节奏"
+    
+    typical_schedule:
+      wake_up: "06:00"
+      sleep: "21:30"
+      productive_hours:
+        - "07:00-10:00"          # 早晨活动时段
+        - "15:00-17:00"          # 下午活动时段
+      meal_times:
+        - "07:00"
+        - "11:30"
+        - "17:30"
+      rest_periods:              # 休息时段
+        - "12:00-14:00"          # 午睡时间
+    
+    capacity:
+      daily_active_hours: 6      # 每日活动时长
+      max_continuous_activity: 1.5  # 最多连续活动时长
+      exercise_frequency: "daily"   # 运动频率：每天
+      min_break_between_tasks: 0.5  # 任务间休息30分钟
+    
+    preferences:
+      preferred_time_slot: "morning"  # 偏好时段：早晨精力好
+      task_distribution: "spread_out" # 任务分散，避免疲劳
+      priority_focus: "health"        # 优先关注：健康
+    
+    energy_cost_coefficients:
+      exercise: 0.9              # 运动重要但适度
+      social: 0.7                # 社交活动
+      creative: 0.8              # 兴趣爱好
+      household: 0.6             # 家务轻松
+      medical: 1.0               # 就医重要
+
+
+# ==================== 客观约束配置 ====================
+objective_constraints:
+  # 1. 时间物理限制
+  time_limits:
+    day_hours: 24
+    min_sleep_hours: 6           # 最少睡眠6小时
+    max_continuous_work: 4       # 连续工作不超过4小时
+    min_rest_after_work: 0.5     # 工作后至少休息30分钟
+  
+  # 2. 天气影响规则
+  weather_impact:
+    rain:
+      outdoor_activity: -30      # 下雨天户外运动-30分
+      all_outdoor: -20           # 所有户外活动-20分
+    snow:
+      outdoor_activity: -40      # 下雪天户外运动-40分
+      all_outdoor: -30
+    storm:
+      all_outdoor: -50           # 暴风雨所有户外活动-50分
+      travel: -40                # 出行-40分
+    extreme_heat:                # 极端高温 (>35°C)
+      outdoor_exercise: -35
+      all_outdoor: -25
+    extreme_cold:                # 极端低温 (<-10°C)
+      outdoor_exercise: -35
+      all_outdoor: -25
+  
+  # 3. 节假日规则
+  holiday_rules:
+    spring_festival:             # 春节
+      work: -40                  # 春节工作-40分
+      study: -20                 # 春节学习-20分
+    national_day:                # 国庆
+      work: -30
+    labor_day:                   # 劳动节
+      work: -25
+    mid_autumn:                  # 中秋
+      work: -25
+    qingming:                    # 清明
+      work: -20
+    dragon_boat:                 # 端午
+      work: -20
+    
+    # 周末规则
+    weekend:
+      work: -10                  # 周末工作轻微惩罚
+      exercise: +10              # 周末运动鼓励
+      social: +15                # 周末社交鼓励
+
+
+# ==================== 个性化调整规则 ====================
+personalization_rules:
+  # 1. 时间段偏移限制
+  time_slot_deviation:
+    max_early_shift: 2           # 最多提前2小时
+    max_late_shift: 3            # 最多推迟3小时
+  
+  # 2. 容量调整范围
+  capacity_adjustment:
+    min_workday_hours: 4         # 最少工作4小时
+    max_workday_hours: 12        # 最多工作12小时
+    min_weekend_hours: 2
+    max_weekend_hours: 8
+  
+  # 3. 任务类型系数调整
+  task_energy_cost:
+    adjustment_range: 0.3        # 每个系数最多调整±0.3
+    normalization_required: true # 调整后必须归一化
+
+
+# ==================== 全局设置 ====================
+global_settings:
+  # 评分权重（可在运行时动态调整）
+  default_weights:
+    habit_match: 0.27
+    date_freshness: 0.20
+    urgency: 0.15
+    time_quality: 0.15
+    load_balance: 0.05
+    priority: 0.08
+    holiday: 0.05
+    weather: 0.05
+  
+  # 缓存配置
+  cache_ttl:
+    standard_profile: null       # 标准模板永久缓存
+    user_profile: 3600           # 用户画像缓存1小时
+    objective_constraints: 86400 # 客观约束缓存24小时
+  
+  # 日志级别
+  log_level: "INFO"
