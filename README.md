@@ -4,6 +4,10 @@ AI-powered intelligent task scheduling and planning system. Input tasks in natur
 
 Built with **Vue 3 + FastAPI**, featuring a hybrid NLP engine (LLM + rule-based), Google OR-Tools optimization engine, real-time WebSocket notifications, multi-country holiday support, and Docker deployment out of the box.
 
+> `Download: 项目完整代码打包 (百度网盘/Google Drive)`
+> `请将下载链接粘贴在此处，替换本行文字`
+> `建议文件名: smart-task-planner-v2.0.0.zip`
+
 > `Screenshot: 主界面截图 (日历 + 任务 + 天气 + 聊天)`
 > `保存为 docs/screenshots/main-dashboard.png, 建议 1200x700px`
 
