@@ -6,7 +6,8 @@
 
 技术栈：**Vue 3 + FastAPI**，集成 hybrid NLP 引擎（LLM + 规则引擎）、Google OR-Tools 调度优化、实时 WebSocket 通知、Docker 一键部署。
 
-> `Download: 百度网盘 / Google Drive 链接` `请替换为真实链接`
+我用夸克网盘给你分享了「smart-task-planner-v2.0.0.zip」，点击链接或复制整段内容，打开「夸克APP」即可获取。
+链接：https://pan.quark.cn/s/a46d75737dad
 
 ---
 
