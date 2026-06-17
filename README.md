@@ -1,8 +1,8 @@
 # Smart Task Planner - 智能任务规划系统
 
-AI-powered intelligent task scheduling and planning system. Input tasks in natural language, and the system intelligently schedules them considering priorities, deadlines, habits, holidays, and weather.
+基于自然语言处理的智能日程管理与任务规划系统。用一句话描述需求，系统自动解析意图、提取信息、智能排程，同时考虑优先级、截止时间、个人习惯、节假日和天气。
 
-Built with **Vue 3 + FastAPI**, featuring a hybrid NLP engine (LLM + rule-based), Google OR-Tools optimization engine, real-time WebSocket notifications, multi-country holiday support, and Docker deployment out of the box.
+技术栈：**Vue 3 + FastAPI**，集成 hybrid NLP 引擎（LLM + 规则引擎）、Google OR-Tools 调度优化、实时 WebSocket 通知、多国节假日日历，支持 Docker 一键部署。
 
 > `Download: 项目完整代码打包 (百度网盘/Google Drive)`
 > `请将下载链接粘贴在此处，替换本行文字`
@@ -12,59 +12,59 @@ Built with **Vue 3 + FastAPI**, featuring a hybrid NLP engine (LLM + rule-based)
 
 ---
 
-## Key Features
+## 核心功能
 
-### Natural Language Task Input
-Type "meeting with the team tomorrow at 3pm for an hour" or "buy groceries this weekend" and the system parses intent, extracts entities, and fills in missing details using learned habits. Supports both LLM-powered parsing (DeepSeek/OpenAI) and a rule-based fallback parser.
+### 自然语言任务输入
+输入"明天下午 3 点开会一小时"或"周末买日用品"，系统自动解析意图、提取实体，并通过学习到的个人习惯补全缺失信息。同时支持 LLM 解析（DeepSeek/OpenAI）和规则引擎兜底。
 
-### Intelligent Scheduling Engine
-Google OR-Tools CP-SAT solver powers the scheduling core. Three-layer constraint model combines hard constraints (no overlap, blocked hours), population standards (student/worker/elderly profiles), and personalized fine-tuning (learned preferences, time-slot offsets). Conflict detection with visual feedback and auto-resolve.
+### 智能排程引擎
+基于 Google OR-Tools CP-SAT 求解器，三层约束模型：硬约束（不重叠、免打扰时段）、人群标准（学生/上班族/老年人模板）、个性化微调（学习偏好、时段偏移）。冲突检测提供可视化反馈和一键自动调整。
 
-### Habit Learning System
-The system learns from your scheduling adjustments. Each time you reschedule a task, the learning engine records the pattern. Over time, it automatically applies learned preferences - default durations, preferred time slots, priority levels - reducing manual input.
+### 习惯学习系统
+每次手动调整任务排期时，系统自动记录调整规律。长期积累后，自动为新任务应用学习到的偏好——默认时长、偏好时段、优先级倾向，减少重复输入。
 
-### Multi-Country Holiday Calendar
-Integrated with the Python `holidays` library covering 150+ countries. Displays public holidays, weekend days, and compensatory rest/adjustment days on the calendar. Properly handles complex rules like lunar calendar holidays (Chinese New Year, Mid-Autumn Festival), floating holidays, and country-specific weekend patterns (Fri-Sat in UAE, Thu-Fri in Iran).
+### 多国节假日日历
+集成 Python `holidays` 库，覆盖 150+ 国家和地区的节假日数据。正确显示公休日、调休日、补假日。支持农历节假日（春节、中秋节等）、浮动节日及特殊周末模式（阿联酋周五-周六、伊朗周四-周五）。
 
 ![天气小部件](docs/screenshots/weather-widget.png)
 
-### Live Weather Integration
-Real-time weather data and 3-day forecast. Configurable city selection with a preset list of major Chinese cities. Weather condition displayed alongside the calendar for context-aware planning.
+### 天气集成
+实时天气数据和 3 天预报。支持城市切换（预设中国主要城市列表）。天气信息在日历中与排程一起展示，辅助决策。
 
 ![国家选择器 + 节假日显示](docs/screenshots/country-selector.png)
 
-### AI Chat Assistant
-Markdown-rendered chat interface with WebSocket streaming. The assistant can parse tasks, answer scheduling questions, generate reports, and provide productivity insights. Conversation history preserved during the session.
+### AI 聊天助手
+支持 Markdown 渲染的聊天界面，基于 WebSocket 流式响应。助手可解析任务、回答排程问题、生成报表、提供效率洞察。单次会话内保留对话上下文。
 
-### Real-Time Notifications
-WebSocket-based notification system with automatic reconnection. Supports deadline reminders, daily summaries, conflict alerts, and custom notifications. Notification center with badge counts and mark-as-read functionality.
+### 实时通知
+基于 WebSocket 的通知系统，支持自动重连。包括截止时间提醒、每日总结、冲突告警、自定义通知。通知中心带未读计数和已读管理。
 
-### Reporting & Analytics
-Weekly and monthly report generation with ECharts visualizations (priority distribution, completion status, workload trends). Export to Word documents via python-docx. Automated report generation through the async task queue.
+### 报表与分析
+支持周报/月报自动生成，ECharts 可视化图表（优先级分布、完成状态、工作负载趋势），支持导出为 Word 文档。通过异步任务队列实现后台自动报表生成。
 
-### Task Management
-Full CRUD with drag-and-drop calendar interface (day/week/month views). Task detail/edit dialog with priority levels, status tracking, deadline management, and quick time-slot buttons. Skeleton loading states and optimized rendering.
+### 任务管理
+完整的增删改查。日历支持日/周/月视图，拖拽调整时间和时长。任务详情/编辑弹窗包含优先级、状态跟踪、截止时间管理、快速时段按钮。骨架屏加载和优化渲染。
 
-### User Preferences & Personalization
-Configurable working hours, blocked time slots, task buffer minutes, default priority. Three standard profiles (student, worker, elderly) with pre-configured schedules. Custom keyword mapping for task classification.
+### 用户偏好与个性化
+可配置工作时间、免打扰时段、任务缓冲时间、默认优先级。内置三种标准模板（学生/上班族/老年人）。支持自定义关键词映射任务分类。
 
 ---
 
-## Tech Stack
+## 技术栈
 
-| Layer | Technology |
+| 层级 | 技术 |
 |---|---|
 | **Frontend** | Vue 3 (Composition API + `<script setup>`), Vite, Element Plus, FullCalendar, ECharts / Vue-ECharts, Pinia, Vue Router, Axios, marked |
 | **Backend** | FastAPI, SQLAlchemy ORM + Alembic, Pydantic, APScheduler, Redis |
 | **AI** | OpenAI-compatible API (DeepSeek), Hybrid NLP (LLM + rule-based), Prompt engineering |
 | **Scheduling** | Google OR-Tools (CP-SAT), Three-layer constraint model |
-| **Database** | MySQL (production), SQLite (development/lite) |
+| **Database** | MySQL (production), SQLite (dev/lite) |
 | **DevOps** | Docker, Docker Compose, Nginx (multi-stage build) |
 | **Tools** | Matplotlib (charts), python-docx (Word export), python-holidays (calendar) |
 
 ---
 
-## Architecture Overview
+## 架构概览
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -102,161 +102,159 @@ Configurable working hours, blocked time slots, task buffer minutes, default pri
 
 ---
 
-## Quick Start
+## 快速开始
 
-### Option 0: Try Online with Docker (1 command)
+### 方式 0：Docker 一键启动（推荐）
 
 ```bash
 docker compose -f docker-compose.lite.yml up -d
 ```
 
-Then Open http://localhost (frontend) and http://localhost:8080/docs (API docs).
+打开 http://localhost 使用前端，http://localhost:8080/docs 查看 API 文档。
 
+> **前置条件**: [Docker](https://www.docker.com/products/docker-desktop/) 24.0+、[Docker Compose](https://docs.docker.com/compose/install/) v2.0+
+> 需要 [DeepSeek API Key](https://platform.deepseek.com/)（免费）和[和风天气 API Key](https://www.qweather.com/)（免费）。
 
-
-> **Prerequisites**: [Docker](https://www.docker.com/products/docker-desktop/) 24.0+ and [Docker Compose](https://docs.docker.com/compose/install/) v2.0+
-> Get your [DeepSeek API Key](https://platform.deepseek.com/) (free) and [Weather API Key](https://www.qweather.com/) (free) before deploying.
-
-### Option 1: Docker (Lite - SQLite, no external dependencies)
+### 方式 1：Docker 完整部署（SQLite 轻量版，无需外部数据库）
 
 ```bash
-# 1. Clone the repo
+# 1. 下载项目
 git clone https://github.com/YOUR_USERNAME/smart-task-planner
 cd smart-task-planner
 
-# 2. Copy and configure environment variables
+# 2. 配置环境变量
 cp .env.docker .env
-# Edit .env to add DEEPSEEK_API_KEY and WEATHER_API_KEY
+# 编辑 .env，填入 DeepSeek API Key 和天气 API Key
 
-# 3. Start with Docker Compose
+# 3. 启动
 docker compose -f docker-compose.lite.yml up -d
 
-# 4. Open in browser
-Open http://localhost
+# 4. 打开浏览器
+http://localhost
 ```
 
-### Option 2: Local Development
+### 方式 2：本地开发
 
-**Prerequisites**: Python 3.10+, Node.js 18+
+**环境要求**: Python 3.10+, Node.js 18+
 
 ```bash
-# Backend
+# 后端
 cd backend
 python -m venv venv
-venv\Scriptsctivate    # Windows
+.env\Scriptsctivate    # Windows
 # source venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 uvicorn main:app --reload --host 0.0.0.0 --port 8080
 
-# Frontend (new terminal)
+# 前端（新开一个终端）
 cd frontend
 npm install
 npm run dev
 ```
 
-Then Open http://localhost:5173 (frontend) and http://localhost:8080/docs (API docs).
+前端地址 http://localhost:5173，API 文档 http://localhost:8080/docs。
 
 ---
 
-## Project Structure
+## 项目结构
 
 ```
 ├── backend/
-│   ├── main.py                  # FastAPI app entry, router registration
+│   ├── main.py                  # FastAPI 应用入口，路由注册
 │   ├── app/
-│   │   ├── models/              # SQLAlchemy ORM models (task, notification)
-│   │   ├── routers/             # 12 route modules (task, chat, weather, holiday...)
-│   │   ├── services/            # Business logic (~30 service modules)
-│   │   │   ├── or_tools_scheduler.py   # OR-Tools CP-SAT scheduling engine
-│   │   │   ├── hybrid_parser.py        # LLM + rule-based NLP parser
-│   │   │   ├── holiday_service.py      # Multi-country holiday calendar
-│   │   │   ├── scoring_engine.py       # Three-layer scoring model
-│   │   │   ├── report_generator.py     # Weekly/monthly report generation
-│   │   │   ├── task_queue.py           # Redis-based async task queue
-│   │   │   └── ...                     # Weather, notification, cache, security...
-│   │   ├── schemas/             # Pydantic request/response schemas
-│   ├── config/                  # Configuration files
-│   ├── scripts/                 # Utility scripts
-│   └── tests/                   # Test suite
+│   │   ├── models/              # SQLAlchemy ORM 数据模型
+│   │   ├── routers/             # 12 个路由模块
+│   │   ├── services/            # 业务逻辑层（约 30 个模块）
+│   │   │   ├── or_tools_scheduler.py   # OR-Tools 排程引擎
+│   │   │   ├── hybrid_parser.py        # LLM + 规则混合 NLP 解析
+│   │   │   ├── holiday_service.py      # 多国节假日服务
+│   │   │   ├── scoring_engine.py       # 三层评分模型
+│   │   │   ├── report_generator.py     # 周报/月报生成
+│   │   │   ├── task_queue.py           # Redis 异步任务队列
+│   │   │   └── ...                     # 天气、通知、缓存、安全等
+│   │   ├── schemas/             # Pydantic 请求/响应模型
+│   ├── config/                  # 配置文件
+│   ├── scripts/                 # 工具脚本
+│   └── tests/                   # 测试套件
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/          # Vue components (Calendar, Chat, Weather...)
-│   │   ├── views/               # Page views (Home, Profile)
-│   │   ├── stores/              # Pinia stores (task, notification)
-│   │   ├── services/            # Service modules (WebSocket)
-│   │   ├── api/                 # Axios API client modules
-│   │   ├── utils/               # Utility modules (cache monitor)
-│   │   └── router/              # Vue Router config
-│   └── public/                  # Static assets
+│   │   ├── components/          # Vue 组件（日历、聊天、天气等）
+│   │   ├── views/               # 页面视图（主页、个人中心）
+│   │   ├── stores/              # Pinia 状态管理
+│   │   ├── services/            # 服务模块（WebSocket）
+│   │   ├── api/                 # Axios API 客户端
+│   │   ├── utils/               # 工具模块（缓存监控）
+│   │   └── router/              # Vue Router 配置
+│   └── public/                  # 静态资源
 │
-├── docker-compose.yml           # Full deployment (MySQL + Redis)
-├── docker-compose.lite.yml      # Lite deployment (SQLite)
-├── .env.docker                  # Environment template
-├── dev.ps1                      # Windows dev startup script
-└── README_DOCKER.md             # Docker deployment guide
+├── docker-compose.yml           # 完整部署（MySQL + Redis）
+├── docker-compose.lite.yml      # 轻量部署（SQLite）
+├── .env.docker                  # 环境变量模板
+├── dev.ps1                      # Windows 启动脚本
+└── README.md
 ```
 
 ---
 
-## What This Project Demonstrates
+## 能力展示
 
-**Full-Stack Development** - Complete Vue 3 SPA with a modular FastAPI backend. Component-based architecture with state management (Pinia), client-side routing, and RESTful API design.
+**全栈开发** - 完整的 Vue 3 SPA + 模块化 FastAPI 后端。组件化架构 + Pinia 状态管理 + 客户端路由 + RESTful API 设计。
 
-**Systems Design** - Multi-layer architecture separating routers, services, and data models. Caching strategy across Redis, in-memory, and localStorage with TTL-based invalidation. Async task queue for background job processing.
+**系统设计** - 分层架构（路由层/服务层/数据模型层）。三级缓存策略（Redis + 内存 + localStorage），TTL 自动过期。异步任务队列处理后台任务。
 
-**Algorithm Design** - Implemented Google OR-Tools CP-SAT solver for constraint-based scheduling with a three-layer model (hard constraints + population standards + personalization). Conflict detection with auto-resolve and manual override paths.
+**算法设计** - Google OR-Tools CP-SAT 求解器实现约束排程：硬约束（时间不重叠） + 人群标准（学生/上班族/老年人） + 个性化微调。冲突检测支持自动解决和手动覆盖。
 
-**AI/LLM Integration** - Hybrid NLP approach combining LLM-powered parsing (OpenAI-compatible API) with a rule-based fallback engine. Prompt engineering for structured entity extraction. Habit learning system that adapts to user behavior over time.
+**AI/LLM 集成** - 混合 NLP 方案：LLM 解析（OpenAI 兼容 API）+ 规则引擎兜底。Prompt engineering 实现结构化实体提取。习惯学习系统长期适应用户行为。
 
-**Real-Time Systems** - WebSocket-based push notifications with automatic reconnection, heartbeat mechanism, and visibility-aware connectivity management.
+**实时通信** - WebSocket 推送通知，自动重连 + 心跳检测 + 可见性感知连接管理。
 
-**Database Design** - SQLAlchemy ORM with Alembic migrations supporting both MySQL and SQLite. Relational model for tasks, notifications, and user preferences.
+**数据库设计** - SQLAlchemy ORM + Alembic 迁移，支持 MySQL 和 SQLite。关系模型覆盖任务、通知、用户偏好。
 
-**DevOps** - Multi-stage Docker builds for both frontend (Nginx) and backend (Python). Two deployment modes: complete (MySQL + Redis) and lite (SQLite). Environment-based configuration.
+**DevOps** - 多阶段 Docker 构建，前后端分离部署（Nginx + Python）。两种部署模式：完整版（MySQL + Redis）和轻量版（SQLite）。环境变量驱动配置。
 
-**Internationalization** - Multi-country holiday calendar supporting 50+ countries with correct weekend mapping, public holiday observance rules, lunar calendar events, and compensatory rest days.
+**国际化** - 多国节假日日历，支持 50+ 国家。正确处理周末映射、法定假日规则、农历事件、调休制度。
 
 ---
 
-## Deploy to Public Server
+## 公网部署
 
-To share your running instance with others on a cloud server:
+将应用部署到云服务器分享给他人：
 
 ```bash
-# 1. Clone on your server
+# 1. 在服务器上拉取代码
 git clone https://github.com/YOUR_USERNAME/smart-task-planner
 cd smart-task-planner
 
-# 2. Copy and configure
+# 2. 配置环境变量
 cp .env.docker .env
-# Edit .env with your actual API keys (DeepSeek, Weather)
+# 编辑 .env 填入真实的 API Key
 
-# 3. Start (lite version, no database setup needed)
+# 3. 启动（轻量版，无需额外数据库）
 docker compose -f docker-compose.lite.yml up -d --build
 
-# 4. Your app is live at http://YOUR_SERVER_IP:80
-# API docs at http://YOUR_SERVER_IP:8080/docs
+# 4. 访问 http://服务器IP:80 即可使用
+# API 文档 http://服务器IP:8080/docs
 ```
 
-> Note: The lite version uses SQLite for simplicity. For production, use `docker compose -f docker-compose.yml up -d --build` for MySQL + Redis.
+> 轻量版使用 SQLite，适合快速部署。生产环境建议用 `docker compose -f docker-compose.yml up -d --build`（MySQL + Redis）。
 
-## API Documentation
+## API 文档
 
-When the server is running, interactive OpenAPI documentation is available at:
+服务启动后，交互式 API 文档访问：
 
 - **Swagger UI**: http://localhost:8080/docs
 - **ReDoc**: http://localhost:8080/redoc
 
-### Available API Routes
+### 主要 API 路由
 
-- `GET /api/tasks` - Task CRUD operations
-- `POST /api/chat/stream` - AI chat with streaming response
-- `GET /api/weather/current?city=...` - Current weather
-- `GET /api/holidays/month?year=...&month=...&country=...` - Month holidays
-- `GET /api/holidays/countries` - Supported country list
-- `GET /api/preferences/` - User preferences
-- `GET /api/notifications/` - User notifications
-- `POST /api/report/...` - Report generation
-- `POST /api/scheduling/optimize` - Schedule optimization
-- `WS /ws/{user_id}` - WebSocket for real-time updates
+- `GET /api/tasks` - 任务 CRUD
+- `POST /api/chat/stream` - AI 聊天（流式响应）
+- `GET /api/weather/current?city=...` - 当前天气
+- `GET /api/holidays/month?year=...&month=...&country=...` - 月节假日
+- `GET /api/holidays/countries` - 支持的国家列表
+- `GET /api/preferences/` - 用户偏好
+- `GET /api/notifications/` - 通知列表
+- `POST /api/report/...` - 报表生成
+- `POST /api/scheduling/optimize` - 排程优化
+- `WS /ws/{user_id}` - WebSocket 实时更新
