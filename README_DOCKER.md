@@ -143,16 +143,16 @@ docker compose -f docker-compose.lite.yml up -d
 docker login
 
 # 2. 给镜像打标签（替换 yourname 为你的用户名）
-docker tag demo_plan-backend yourname/task-planner-backend:latest
-docker tag demo_plan-frontend yourname/task-planner-frontend:latest
+docker tag demo_plan-backend YOUR_DOCKER_USERNAME/task-planner-backend:latest
+docker tag demo_plan-frontend YOUR_DOCKER_USERNAME/task-planner-frontend:latest
 
 # 3. 推送
-docker push yourname/task-planner-backend:latest
-docker push yourname/task-planner-frontend:latest
+docker push YOUR_DOCKER_USERNAME/task-planner-backend:latest
+docker push YOUR_DOCKER_USERNAME/task-planner-frontend:latest
 
 # 4. 朋友拉取运行
-docker pull yourname/task-planner-backend:latest
-docker pull yourname/task-planner-frontend:latest
+docker pull YOUR_DOCKER_USERNAME/task-planner-backend:latest
+docker pull YOUR_DOCKER_USERNAME/task-planner-frontend:latest
 # 然后用自定义的 docker-compose.yml 启动
 ```
 

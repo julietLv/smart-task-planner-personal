@@ -4,6 +4,9 @@ AI-powered intelligent task scheduling and planning system. Input tasks in natur
 
 Built with **Vue 3 + FastAPI**, featuring a hybrid NLP engine (LLM + rule-based), Google OR-Tools optimization engine, real-time WebSocket notifications, multi-country holiday support, and Docker deployment out of the box.
 
+> `Screenshot: 主界面截图 (日历 + 任务 + 天气 + 聊天)`
+> `保存为 docs/screenshots/main-dashboard.png, 建议 1200x700px`
+
 ---
 
 ## Key Features
@@ -20,8 +23,12 @@ The system learns from your scheduling adjustments. Each time you reschedule a t
 ### Multi-Country Holiday Calendar
 Integrated with the Python `holidays` library covering 150+ countries. Displays public holidays, weekend days, and compensatory rest/adjustment days on the calendar. Properly handles complex rules like lunar calendar holidays (Chinese New Year, Mid-Autumn Festival), floating holidays, and country-specific weekend patterns (Fri-Sat in UAE, Thu-Fri in Iran).
 
+> `Screenshot: 天气小部件` `保存为 docs/screenshots/weather-widget.png`
+
 ### Live Weather Integration
 Real-time weather data and 3-day forecast. Configurable city selection with a preset list of major Chinese cities. Weather condition displayed alongside the calendar for context-aware planning.
+
+> `Screenshot: 国家选择器 + 节假日显示` `保存为 docs/screenshots/country-selector.png`
 
 ### AI Chat Assistant
 Markdown-rendered chat interface with WebSocket streaming. The assistant can parse tasks, answer scheduling questions, generate reports, and provide productivity insights. Conversation history preserved during the session.
@@ -88,9 +95,25 @@ Configurable working hours, blocked time slots, task buffer minutes, default pri
 └──────────────────────────────────────────────────────┘
 ```
 
+> `Screenshot: 功能演示截图 (任务输入、调度优化、报表、国家选择)`
+> `保存为 docs/screenshots/feature-showcase.png`
+
 ---
 
 ## Quick Start
+
+### Option 0: Try Online with Docker (1 command)
+
+```bash
+docker compose -f docker-compose.lite.yml up -d
+```
+
+Then Open http://localhost (frontend) and http://localhost:8080/docs (API docs).
+
+
+
+> **Prerequisites**: [Docker](https://www.docker.com/products/docker-desktop/) 24.0+ and [Docker Compose](https://docs.docker.com/compose/install/) v2.0+
+> Get your [DeepSeek API Key](https://platform.deepseek.com/) (free) and [Weather API Key](https://www.qweather.com/) (free) before deploying.
 
 ### Option 1: Docker (Lite - SQLite, no external dependencies)
 
@@ -107,7 +130,7 @@ cp .env.docker .env
 docker compose -f docker-compose.lite.yml up -d
 
 # 4. Open in browser
-open http://localhost
+Open http://localhost
 ```
 
 ### Option 2: Local Development
@@ -129,7 +152,7 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173 (frontend) and http://localhost:8080/docs (API docs).
+Then Open http://localhost:5173 (frontend) and http://localhost:8080/docs (API docs).
 
 ---
 
@@ -193,6 +216,28 @@ Then open http://localhost:5173 (frontend) and http://localhost:8080/docs (API d
 **Internationalization** - Multi-country holiday calendar supporting 50+ countries with correct weekend mapping, public holiday observance rules, lunar calendar events, and compensatory rest days.
 
 ---
+
+## Deploy to Public Server
+
+To share your running instance with others on a cloud server:
+
+```bash
+# 1. Clone on your server
+git clone https://github.com/YOUR_USERNAME/smart-task-planner
+cd smart-task-planner
+
+# 2. Copy and configure
+cp .env.docker .env
+# Edit .env with your actual API keys (DeepSeek, Weather)
+
+# 3. Start (lite version, no database setup needed)
+docker compose -f docker-compose.lite.yml up -d --build
+
+# 4. Your app is live at http://YOUR_SERVER_IP:80
+# API docs at http://YOUR_SERVER_IP:8080/docs
+```
+
+> Note: The lite version uses SQLite for simplicity. For production, use `docker compose -f docker-compose.yml up -d --build` for MySQL + Redis.
 
 ## API Documentation
 

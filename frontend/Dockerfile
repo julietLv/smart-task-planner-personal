@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # 安装依赖
-RUN npm ci --registry=https://registry.npmmirror.com
+RUN npm ci
 
 # 复制源码
 COPY . .
