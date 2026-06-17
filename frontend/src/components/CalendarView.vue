@@ -16,6 +16,31 @@
       </div>
     </div>
 
+    <!-- Country selector -->
+    <div class="country-selector-bar">
+      <el-select
+        v-model="selectedCountry"
+        placeholder="Select country"
+        size="small"
+        filterable
+        class="country-select"
+        popper-class="country-popper"
+      >
+        <el-option
+          v-for="(info, code) in countries"
+          :key="code"
+          :label="info.zh ? `${info.zh} (${info.en})` : info.en"
+          :value="code"
+        >
+          <span class="country-option">
+            <span class="country-flag">{{ getFlagEmoji(code) }}</span>
+            <span>{{ info.zh || info.en }}</span>
+            <span class="country-en">{{ info.en }}</span>
+          </span>
+        </el-option>
+      </el-select>
+    </div>
+
     <FullCalendar
       ref="calendarRef"
       :options="calendarOptions"
@@ -251,6 +276,10 @@ const selectedTask = ref(null)
 const formRef = ref(null)
 const isDeleting = ref(false)
 const monthHolidays = ref({})
+// Persist country selection across page refreshes
+const savedCountry = localStorage.getItem('planpal_selected_country')
+const selectedCountry = ref(savedCountry || 'CN')
+const countries = ref([])
 
 // ✅ 前端缓存配置
 const holidayCache = new Map()  // 内存缓存（最快）
@@ -338,8 +367,21 @@ const formRules = {
   ]
 }
 
-async function loadMonthHolidays(year, month) {
-  const cacheKey = `${year}-${month}`
+async function fetchCountries() {
+  try {
+    const response = await axios.get('/api/holidays/countries')
+    if (response.data.success) {
+      countries.value = response.data.countries
+    }
+  } catch (error) {
+    console.error('Failed to load country list:', error)
+    ElMessage.warning('Failed to load country list')
+  }
+}
+
+async function loadMonthHolidays(year, month, country) {
+  const c = country || selectedCountry.value
+  const cacheKey = `${c}-${year}-${month}`
   const requestStart = Date.now()
 
   // ✅ 第1级：检查内存缓存（<1ms）
@@ -377,7 +419,7 @@ async function loadMonthHolidays(year, month) {
 
   try {
     const response = await axios.get('/api/holidays/month', {
-      params: { year, month }
+      params: { year, month, country: c }
     })
 
     const responseTime = Date.now() - requestStart
@@ -419,13 +461,45 @@ function preloadAdjacentMonths(year, month) {
 
   // 后台异步加载，不影响当前操作
   Promise.all([
-    loadMonthHolidays(prevYear, prevMonth)
+    loadMonthHolidays(prevYear, prevMonth, selectedCountry.value)
       .then(() => cacheMonitor.recordPreload(true))
       .catch(() => cacheMonitor.recordPreload(false)),
-    loadMonthHolidays(nextYear, nextMonth)
+    loadMonthHolidays(nextYear, nextMonth, selectedCountry.value)
       .then(() => cacheMonitor.recordPreload(true))
       .catch(() => cacheMonitor.recordPreload(false))
   ])
+}
+
+
+// Watch country changes to reload holiday data
+watch(selectedCountry, (newCountry) => {
+  // Persist selection
+  localStorage.setItem('planpal_selected_country', newCountry)
+  // Clear memory cache when country changes
+  holidayCache.clear()
+  // Clear localStorage cache for holidays
+  const keysToRemove = []
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('holiday_cache_')) {
+      keysToRemove.push(key)
+    }
+  })
+  keysToRemove.forEach(key => localStorage.removeItem(key))
+  // Reload current view
+  if (calendarRef.value) {
+    const calApi = calendarRef.value.getApi()
+    const currentDate = calApi.getDate()
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth() + 1
+    loadMonthHolidays(year, month, selectedCountry.value)
+  }
+})
+
+// Country flag emoji mapping
+function getFlagEmoji(countryCode) {
+  if (!countryCode || countryCode.length !== 2) return ''
+  const codePoints = countryCode.toUpperCase().split('').map(c => 0x1F1E6 + c.charCodeAt(0) - 65)
+  return String.fromCodePoint(...codePoints)
 }
 
 function getHolidayInfo(dateStr) {
@@ -453,7 +527,9 @@ const calendarOptions = computed(() => ({
 
   // ✅ 自定义日期单元格内容（显示节日）
   dayCellContent: (arg) => {
-    const dateStr = arg.date.toISOString().split('T')[0]
+    // Use local-time formatting to avoid UTC timezone shift
+    const d = arg.date
+    const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
     const holiday = getHolidayInfo(dateStr)
 
     if (holiday) {
@@ -483,12 +559,12 @@ const calendarOptions = computed(() => ({
     // ✅ 如果跨越了多个月，加载两个月的数据
     if (startYear === endYear && startMonth === endMonth) {
       // 单月视图
-      await loadMonthHolidays(startYear, startMonth)
+      await loadMonthHolidays(startYear, startMonth, selectedCountry.value)
     } else {
       // 跨月视图（如周视图跨越月底）
       await Promise.all([
-        loadMonthHolidays(startYear, startMonth),
-        loadMonthHolidays(endYear, endMonth)
+        loadMonthHolidays(startYear, startMonth, selectedCountry.value),
+        loadMonthHolidays(endYear, endMonth, selectedCountry.value)
       ])
     }
   },
@@ -1081,6 +1157,8 @@ watch(() => taskStore.tasks, (newTasks) => {
 onMounted(async () => {
   // ✅ 初始化缓存
   initHolidayCache()
+  // Load country list in background (non-blocking)
+  fetchCountries()
 
   await taskStore.fetchTasks()
 
@@ -1099,6 +1177,35 @@ onMounted(async () => {
 .calendar-container {
   position: relative;
   height: 100%;
+}
+
+/* Country selector bar */
+.country-selector-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+  background: white;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.country-select {
+  width: 240px;
+}
+
+.country-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.country-flag {
+  font-size: 18px;
+}
+
+.country-en {
+  font-size: 12px;
+  color: #909399;
+  margin-left: auto;
 }
 
 /* ✅ 骨架屏样式 */

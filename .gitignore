@@ -1,0 +1,61 @@
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary / debug scripts
+_fix_all.py
+backend/*test*.py
+backend/*debug*.py
+backend/*check*.py
+backend/*clean*.py
+backend/*verify*.py
+backend/*clear*.py
+backend/*simulate*.py
+backend/*migrate*.py
+backend/*debug*.js
+backend/test*.py
+backend/debug*.py
+backend/check*.py
+backend/*.bak
+
+# Alembic generated migration backup
+backend/alembic/img.png
+
+# Frontend debug files
+frontend/*.js.bak
+frontend/*.html
+frontend/debug_*.js
+frontend/test-*.js
+
+# Data / database files
+*.db
+*.sqlite
+*.sqlite3
+backend/data/*.json
+
+# Backup files
+*.backup
+*.bak

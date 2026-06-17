@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 环境变量（不要打包真实密钥）
+.env
+
+# 测试和临时脚本
+test_*.py
+check_*.py
+debug_*.py
+clear_*.py
+migrate_*.py
+add_*.py
+count*.py
+simulate_*.py
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# 日志和数据
+logs/
+*.log
+data/*.db

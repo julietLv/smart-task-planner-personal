@@ -50,7 +50,7 @@ let greetingTimer = null
 
 async function fetchGreeting() {
   try {
-    const response = await fetch('http://localhost:8080/api/chat/assistant/daily-greeting', {
+    const response = await fetch('/api/chat/assistant/daily-greeting', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

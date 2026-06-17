@@ -1,0 +1,67 @@
+# ============================================================
+# 智能任务规划系统 - Docker Compose（轻量版）
+# 仅包含：后端(FastAPI) + 前端(Nginx)
+# 使用 SQLite 数据库，无需 MySQL 和 Redis
+# 适合快速体验和分享
+# ============================================================
+
+version: "3.8"
+
+services:
+  # ======================== 后端 API ========================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: plan-backend
+    restart: unless-stopped
+    environment:
+      # ---- 服务器配置 ----
+      - HOST=0.0.0.0
+      - PORT=8080
+      - RELOAD=false
+
+      # ---- DeepSeek API（⚠️ 必须修改为你自己的 Key）----
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-sk-your-api-key-here}
+
+      # ---- 天气 API（⚠️ 必须修改为你自己的 Key）----
+      - WEATHER_API_KEY=${WEATHER_API_KEY:-your-weather-api-key}
+      - WEATHER_API_HOST=${WEATHER_API_HOST:-n6564vxqt9.re.qweatherapi.com}
+      - DEFAULT_CITY=${DEFAULT_CITY:-北京}
+
+      # ---- 数据库配置（SQLite - 无需外部数据库）----
+      - DATABASE_TYPE=sqlite
+
+      # ---- CORS ----
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      # 持久化 SQLite 数据库文件
+      - sqlite_data:/app/data
+    networks:
+      - plan-network
+
+  # ======================== 前端（Nginx）========================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: plan-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - plan-network
+
+# ======================== 数据卷 ========================
+volumes:
+  sqlite_data:
+    driver: local
+
+# ======================== 网络 ========================
+networks:
+  plan-network:
+    driver: bridge

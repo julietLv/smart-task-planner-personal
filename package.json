@@ -1,0 +1,14 @@
+{
+  "name": "smart-task-planner",
+  "version": "2.0.0",
+  "private": true,
+  "description": "智能任务规划系统 - 一键启动",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c cyan,green \"cd backend && uvicorn main:app --reload --host 0.0.0.0 --port 8080\" \"cd frontend && npm run dev\"",
+    "dev:backend": "cd backend && uvicorn main:app --reload --host 0.0.0.0 --port 8080",
+    "dev:frontend": "cd frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

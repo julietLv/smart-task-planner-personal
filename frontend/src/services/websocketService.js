@@ -54,7 +54,9 @@ class WebSocketService {
     }
 
     this.isConnecting = true
-    const wsUrl = `ws://localhost:8080/ws/${this.userId}`
+    // 动态构建 WebSocket URL，兼容开发环境和 Docker 生产环境
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const wsUrl = `${protocol}//${window.location.host}/ws/${this.userId}`
     console.log(`🔌 正在连接 WebSocket: ${wsUrl}`)
 
     this.ws = new WebSocket(wsUrl)

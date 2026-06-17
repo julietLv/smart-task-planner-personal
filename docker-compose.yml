@@ -1,0 +1,132 @@
+# ============================================================
+# 智能任务规划系统 - Docker Compose（完整版）
+# 包含：MySQL + Redis + 后端(FastAPI) + 前端(Nginx)
+# ============================================================
+
+version: "3.8"
+
+services:
+  # ======================== MySQL 数据库 ========================
+  mysql:
+    image: mysql:8.0
+    container_name: plan-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-demo_plan_2024}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-task_planner}
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"   # 映射到 3307 避免与本地 MySQL 冲突
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # 首次启动时执行初始化 SQL（可选）
+      # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-demo_plan_2024}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - plan-network
+
+  # ======================== Redis 缓存 ========================
+  redis:
+    image: redis:7-alpine
+    container_name: plan-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6380}:6379"   # 映射到 6380 避免与本地 Redis 冲突
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - plan-network
+
+  # ======================== 后端 API ========================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: plan-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # ---- 服务器配置 ----
+      - HOST=0.0.0.0
+      - PORT=8080
+      - RELOAD=false
+
+      # ---- DeepSeek API（⚠️ 必须修改为你自己的 Key）----
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-sk-your-api-key-here}
+
+      # ---- 天气 API（⚠️ 必须修改为你自己的 Key）----
+      - WEATHER_API_KEY=${WEATHER_API_KEY:-your-weather-api-key}
+      - WEATHER_API_HOST=${WEATHER_API_HOST:-n6564vxqt9.re.qweatherapi.com}
+      - DEFAULT_CITY=${DEFAULT_CITY:-北京}
+
+      # ---- 数据库配置（MySQL）----
+      - DATABASE_TYPE=mysql
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD:-demo_plan_2024}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-task_planner}
+
+      # ---- 数据库连接池 ----
+      - DB_POOL_MAX=20
+      - DB_POOL_MIN=5
+      - DB_POOL_MAX_CACHED=10
+
+      # ---- Redis 缓存 ----
+      - REDIS_URL=redis://redis:6379/0
+      - CACHE_TTL_TASKS=300
+      - CACHE_TTL_LLM_RESPONSE=600
+
+      # ---- CORS ----
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    networks:
+      - plan-network
+
+  # ======================== 前端（Nginx）========================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: plan-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - plan-network
+
+# ======================== 数据卷 ========================
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ======================== 网络 ========================
+networks:
+  plan-network:
+    driver: bridge

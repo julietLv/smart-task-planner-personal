@@ -1,0 +1,40 @@
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Python
+**/venv/
+**/__pycache__/
+**/*.pyc
+
+# Node
+**/node_modules/
+**/dist/
+
+# 环境文件（含真实密钥）
+.env
+backend/.env
+!**.env.example
+!**.env.docker
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# 日志
+*.log
+logs/
+
+# 文档
+*.md
+!README.md
+
+# 操作系统
+.DS_Store
+Thumbs.db

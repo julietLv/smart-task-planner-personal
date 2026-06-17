@@ -1461,7 +1461,7 @@ function formatSolutionTime(datetime) {
 
 // ⭐ 下载 Word 格式的周报
 function downloadWordReport(userId, timeRange) {
-  const url = `http://localhost:8080/api/reports/weekly/${userId}/download?time_range=${timeRange}`
+  const url = `/api/reports/weekly/${userId}/download?time_range=${timeRange}`
   window.open(url, '_blank')
   ElMessage.success('正在下载 Word 报告...')
 }
