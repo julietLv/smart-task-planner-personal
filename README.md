@@ -8,8 +8,7 @@ Built with **Vue 3 + FastAPI**, featuring a hybrid NLP engine (LLM + rule-based)
 > `请将下载链接粘贴在此处，替换本行文字`
 > `建议文件名: smart-task-planner-v2.0.0.zip`
 
-> `Screenshot: 主界面截图 (日历 + 任务 + 天气 + 聊天)`
-> `保存为 docs/screenshots/main-dashboard.png, 建议 1200x700px`
+![主界面截图](docs/screenshots/main-dashboard.png)
 
 ---
 
@@ -27,12 +26,12 @@ The system learns from your scheduling adjustments. Each time you reschedule a t
 ### Multi-Country Holiday Calendar
 Integrated with the Python `holidays` library covering 150+ countries. Displays public holidays, weekend days, and compensatory rest/adjustment days on the calendar. Properly handles complex rules like lunar calendar holidays (Chinese New Year, Mid-Autumn Festival), floating holidays, and country-specific weekend patterns (Fri-Sat in UAE, Thu-Fri in Iran).
 
-> `Screenshot: 天气小部件` `保存为 docs/screenshots/weather-widget.png`
+![天气小部件](docs/screenshots/weather-widget.png)
 
 ### Live Weather Integration
 Real-time weather data and 3-day forecast. Configurable city selection with a preset list of major Chinese cities. Weather condition displayed alongside the calendar for context-aware planning.
 
-> `Screenshot: 国家选择器 + 节假日显示` `保存为 docs/screenshots/country-selector.png`
+![国家选择器 + 节假日显示](docs/screenshots/country-selector.png)
 
 ### AI Chat Assistant
 Markdown-rendered chat interface with WebSocket streaming. The assistant can parse tasks, answer scheduling questions, generate reports, and provide productivity insights. Conversation history preserved during the session.
@@ -99,8 +98,7 @@ Configurable working hours, blocked time slots, task buffer minutes, default pri
 └──────────────────────────────────────────────────────┘
 ```
 
-> `Screenshot: 功能演示截图 (任务输入、调度优化、报表、国家选择)`
-> `保存为 docs/screenshots/feature-showcase.png`
+![功能演示截图](docs/screenshots/feature-showcase.png)
 
 ---
 
